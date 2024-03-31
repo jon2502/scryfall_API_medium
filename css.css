@@ -1,9 +1,12 @@
 body{
     display: flex;
     flex-direction: column;
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
 }
 #input{
-    margin-bottom: 2.5vh;
+    margin: 2.5vh;
 }
 
 #cardsprint{
@@ -51,4 +54,32 @@ body{
 }
 img{
     width: 100%;
+}
+
+/*overlay and modal*/
+
+.overlay{
+    position:fixed;
+    z-index:10;
+    width:100vw;
+    height:100vh;
+    top: 0%;
+    background:hsl(199, 21%, 17%, .75); 
+    display:flex; 
+    align-items: center; 
+    justify-content:center; 
+    flex-direction:column;
+}
+.modal{
+    border-radius:10px;
+    width:1400px;
+    min-height:500px;
+    padding:10px;
+    background:rgb(248, 248, 248);
+}
+.modal button{
+    border-radius:10px;
+    padding:10px 14px;
+    display:flex;
+    cursor: pointer;
 }
