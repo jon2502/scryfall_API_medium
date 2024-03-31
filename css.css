@@ -1,0 +1,54 @@
+body{
+    display: flex;
+    flex-direction: column;
+}
+#input{
+    margin-bottom: 2.5vh;
+}
+
+#cardsprint{
+    display: grid;
+    margin: auto;
+    grid-template-columns: repeat(5, 18vw);
+}
+
+.card{
+    position: relative;
+    margin: 5px;
+}
+
+.doublefacedcard{
+    transform: scale(1);
+    transform-style: preserve-3d;
+    transition:transform .5s;
+    transform-origin: center;
+}
+
+.doublefacedcard.flip{
+    transform: rotateY(180deg);
+}
+
+.frontFace, .backSide{
+    position: absolute;
+    backface-visibility: hidden;
+}
+.backSide{
+    transform: rotateY(180deg);
+}
+
+.flipbtn{
+    position: relative;
+    opacity: 0.80;
+    background: white;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
+    border: 2px solid #343242;
+    display: block;
+    height: 44px;
+    width: 44px;
+    padding: 7px;
+    cursor: pointer;
+}
+img{
+    width: 100%;
+}
