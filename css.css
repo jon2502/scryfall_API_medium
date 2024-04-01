@@ -80,6 +80,16 @@ img{
 .modal button{
     border-radius:10px;
     padding:10px 14px;
+    margin: 0.5vw;
     display:flex;
     cursor: pointer;
+}
+
+#cardInfo{
+    display: flex;
+}
+
+#textbox{
+    width: 50vw;
+    margin-left: 1vw;
 }

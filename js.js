@@ -15,7 +15,6 @@ async function loadDoc() {
     generateimg(jsonData)
 }
 async function generateimg(Data){
-    console.log(Data)
     cardsprint.innerHTML=``
     if(Data.data.length == 1){
         const response = await fetch(`${URL2}${Data.data[0]}`);
@@ -27,10 +26,16 @@ async function generateimg(Data){
             const cardData = await response.json();
             if ('card_faces' in cardData){
                     const cards = document.createElement('div')
-                    cards.innerHTML=`<div class="card doublefacedcard" id="${cardData.name}">
-                        <img class="frontFace" src=${cardData.card_faces[0].image_uris.normal}>
-                        <img class="backSide" src=${cardData.card_faces[1].image_uris.normal}>
-                    </div><button class="flipbtn">flip</button>`
+                    cards.classList.add('card')
+                    if (cardData.layout == "split"){
+                        cards.setAttribute("id", cardData.name);
+                        cards.innerHTML=`<img src=${cardData.image_uris.normal}>`
+                    }else{
+                        cards.innerHTML=`<div class="card doublefacedcard" id="${cardData.name}">
+                            <img class="frontFace" src=${cardData.card_faces[0].image_uris.normal}>
+                            <img class="backSide" src=${cardData.card_faces[1].image_uris.normal}>
+                        </div><button class="flipbtn">flip</button>`  
+                    }
                     cardsprint.appendChild(cards)
         
                 } else {
@@ -64,7 +69,11 @@ function setflip(){
 
 }
 
-function CreateInfoPage(cardData){
+async function CreateInfoPage(cardData){
+    const response = await fetch(`${URL3_1}${cardData.name}${URL3_2}`);
+    const jsonData = await response.json();
+    console.log(jsonData)
+
     let overlay = document.createElement('div');
     overlay.classList.add('overlay');
     document.body.prepend(overlay);
@@ -81,4 +90,47 @@ function CreateInfoPage(cardData){
     closeBtn.addEventListener('click', (e) => {
         e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode);
     })
+
+    var Info = document.createElement('section')
+    Info.id = "cardInfo"
+        Info.innerHTML=`
+            ${'card_faces' in cardData ? `
+            <div class="card doublefacedcard" id="singledouble">
+                <img class="frontFace" src=${cardData.card_faces[0].image_uris.normal}>
+                <img class="backSide" src=${cardData.card_faces[1].image_uris.normal}>
+            </div>
+            <button class="flipbtn">flip</button>
+            </section>
+        `:`
+            <section>
+            <img id="singlecard" src=${cardData.image_uris.normal}>
+            </section>
+            <section id="textbox">
+                <h1>${cardData.name}</h1>
+                <p>${cardData.type_line}</p>
+                <div>
+                    <p>${cardData.oracle_text}</p>
+                </div>
+                <div>
+                    <p>${cardData.flavor_text}</p>
+                </div>
+                <p>${cardData.power}/${cardData.toughness}</p>
+            <p id="artist">Illustrated by ${cardData.artist}</p>
+            </section>
+            `}
+        <section>
+            ${jsonData.data.map((card) => `<button id="${card.id}">${card.set_name} #${card.collector_number}</button>`).join('')}
+        </section>
+        `
+        modal.append(Info)
+        for ( object of jsonData.data){
+            switchinfo = document.getElementById(object.id)
+            switchinfo.addEventListener('mouseover', function(){
+
+            })
+            switchinfo.addEventListener('click', function(){
+                
+            })
+        }
+
 }
