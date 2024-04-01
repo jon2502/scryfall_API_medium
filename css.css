@@ -81,7 +81,6 @@ img{
     border-radius:10px;
     padding:10px 14px;
     margin: 0.5vw;
-    display:flex;
     cursor: pointer;
 }
 
@@ -89,7 +88,13 @@ img{
     display: flex;
 }
 
+#cardbox{
+    width: 50wv;
+}
 #textbox{
-    width: 50vw;
+    width: 25vw;
     margin-left: 1vw;
+}
+#altbox{
+    width: 40vw;
 }

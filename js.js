@@ -95,6 +95,7 @@ async function CreateInfoPage(cardData){
     Info.id = "cardInfo"
         Info.innerHTML=`
             ${'card_faces' in cardData ? `
+            <section id="cardbox">
             <div class="card doublefacedcard" id="singledouble">
                 <img class="frontFace" src=${cardData.card_faces[0].image_uris.normal}>
                 <img class="backSide" src=${cardData.card_faces[1].image_uris.normal}>
@@ -102,7 +103,7 @@ async function CreateInfoPage(cardData){
             <button class="flipbtn">flip</button>
             </section>
         `:`
-            <section>
+            <section id="cardbox">
             <img id="singlecard" src=${cardData.image_uris.normal}>
             </section>
             <section id="textbox">
@@ -118,7 +119,7 @@ async function CreateInfoPage(cardData){
             <p id="artist">Illustrated by ${cardData.artist}</p>
             </section>
             `}
-        <section>
+        <section id="altbox">
             ${jsonData.data.map((card) => `<button id="${card.id}">${card.set_name} #${card.collector_number}</button>`).join('')}
         </section>
         `
