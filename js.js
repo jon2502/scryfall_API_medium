@@ -92,14 +92,46 @@ async function CreateInfoPage(cardData){
 
     var Info = document.createElement('section')
     Info.id = "cardInfo"
+    console.log(cardData)
         Info.innerHTML=`
             ${'card_faces' in cardData ? `
             <section id="cardbox">
-            <div class="card doublefacedcard" id="singlecard">
-                <img class="frontFace" src=${cardData.card_faces[0].image_uris.normal}>
-                <img class="backSide" src=${cardData.card_faces[1].image_uris.normal}>
-            </div>
-            <button class="flipbtn">flip</button>
+                <div class="doublefacedcard" id="singlecard">
+                    <img class="frontFace" src=${cardData.card_faces[0].image_uris.normal}>
+                    <img class="backSide" src=${cardData.card_faces[1].image_uris.normal}>
+                </div>
+                <div>
+                    <button class="flipbtn">flip</button>
+                </div>
+            </section>
+            <section id="textbox">
+                <div id="frontFaceText">
+                    <h1>${cardData.card_faces[0].name}</h1>
+                    <p>${cardData.card_faces[0].type_line}</p>
+                    <div>
+                        <p>${cardData.card_faces[0].oracle_text}</p>
+                    </div>
+                    <div id="flavorBox">
+                    ${'flavor_text' in cardData.card_faces[0] ?`
+                        <p id="flavortext">${cardData.card_faces[0].flavor_text}</p>
+                    `:``}
+                    </div>
+                    <p>${cardData.card_faces[0].power}/${cardData.card_faces[0].toughness}</p>
+                </div>
+                <div id="backSideText">
+                    <h1>${cardData.card_faces[1].name}</h1>
+                    <p>${cardData.card_faces[1].type_line}</p>
+                    <div>
+                        <p>${cardData.card_faces[1].oracle_text}</p>
+                    </div>
+                    <div id="flavorBox">
+                    ${'flavor_text' in cardData.card_faces[1] ?`
+                        <p id="flavortext">${cardData.card_faces[1].flavor_text}</p>
+                    `:``}
+                    </div>
+                    <p>${cardData.card_faces[1].power}/${cardData.card_faces[1].toughness}</p>
+                </div>
+                <p id="artist">Illustrated by ${cardData.artist}</p>
             </section>
         `:`
             <section id="cardbox">
@@ -116,7 +148,9 @@ async function CreateInfoPage(cardData){
                     <p id="flavortext">${cardData.flavor_text}</p>
                 `:``}
                 </div>
-                <p>${cardData.power}/${cardData.toughness}</p>
+                ${'power' in cardData ?`
+                    <p>${cardData.power}/${cardData.toughness}</p>
+                `:``}
             <p id="artist">Illustrated by ${cardData.artist}</p>
             </section>
             `}
@@ -125,6 +159,7 @@ async function CreateInfoPage(cardData){
         </section>
         `
         modal.append(Info)
+
         for (let object of jsonData.data){
             switchinfo = document.getElementById(object.id)
             switchinfo.addEventListener('mouseover', function(){
@@ -148,7 +183,9 @@ async function CreateInfoPage(cardData){
             }else{
                 cardart.setAttribute('src', obj.image_uris.normal,)
             }
+            
             artistName.innerText=`Illustrated by ${obj.artist}`
+
             if(!obj.flavor_text){
                 flavorBox.innerHTML=``
             }else if(flavorBox.hasChildNodes()){
