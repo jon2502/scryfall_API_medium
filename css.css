@@ -33,6 +33,7 @@ body{
 }
 
 .frontFace, .backSide{
+    grid-area: 1/1;
     position: absolute;
     backface-visibility: hidden;
 }
@@ -92,10 +93,14 @@ img{
 #cardbox{
     width: 20vw;
 }
+
 #textbox{
     width: 25vw;
     margin-left: 1vw;
 }
 #altbox{
     width: 40vw;
+}
+#singlecard{
+    display: grid;
 }
