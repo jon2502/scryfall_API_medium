@@ -31,7 +31,13 @@ body{
 .doublefacedcard.flip{
     transform: rotateY(180deg);
 }
-
+.overlayfrontFace, .overlaybackSide{
+    grid-area: 1/1;
+    backface-visibility: hidden;
+}
+.overlaybackSide{
+    transform: rotateY(180deg);
+}
 .frontFace, .backSide{
     grid-area: 1/1;
     position: absolute;

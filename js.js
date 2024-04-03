@@ -59,6 +59,7 @@ function setflip(){
     flipButtons.forEach(btn=>{
         btn.addEventListener('click',function(){
             card = btn.parentElement.childNodes[0]
+            console.log(card)
             if(card.classList.contains('flip')){
                 card.classList.remove('flip')
             }else{
@@ -95,14 +96,11 @@ async function CreateInfoPage(cardData){
     console.log(cardData)
         Info.innerHTML=`
             ${'card_faces' in cardData ? `
-            <section id="cardbox">
-                <div class="doublefacedcard" id="singlecard">
-                    <img class="frontFace" src=${cardData.card_faces[0].image_uris.normal}>
-                    <img class="backSide" src=${cardData.card_faces[1].image_uris.normal}>
+            <section id="cardbox"><div class="doublefacedcard" id="singlecard">
+                    <img class="overlayfrontFace" src=${cardData.card_faces[0].image_uris.normal}>
+                    <img class="overlaybackSide" src=${cardData.card_faces[1].image_uris.normal}>
                 </div>
-                <div>
-                    <button class="flipbtn">flip</button>
-                </div>
+                <button class="flipbtn">flip</button>
             </section>
             <section id="textbox">
                 <div id="frontFaceText">
@@ -159,6 +157,7 @@ async function CreateInfoPage(cardData){
         </section>
         `
         modal.append(Info)
+        setflip()
 
         for (let object of jsonData.data){
             switchinfo = document.getElementById(object.id)
