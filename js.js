@@ -3,8 +3,8 @@ var print = document.getElementById('print')
 var cardsprint = document.getElementById('cardsprint')
 const URL1 = 'https://api.scryfall.com/cards/autocomplete?q='
 const URL2 = 'https://api.scryfall.com/cards/named?exact='
-const URL3_1 = 'https://api.scryfall.com/cards/search?q='
-const URL3_2 = '+unique%3Aprints&unique=cards'
+const URL3_1 = 'https://api.scryfall.com/cards/search?q="'
+const URL3_2 = '"+unique%3Aprints&unique=cards'
 
 
 print.addEventListener("click", loadDoc);
@@ -94,13 +94,17 @@ async function CreateInfoPage(cardData){
     var Info = document.createElement('section')
     Info.id = "cardInfo"
     console.log(cardData)
+    console.log(cardData.layout)
         Info.innerHTML=`
             ${'card_faces' in cardData ? `
-            <section id="cardbox"><div class="doublefacedcard" id="singlecard">
+            <section id="cardbox">${'split' == cardData.layout ? `
+            <img id="singlecard" src=${cardData.image_uris.normal}>
+        `:`<div class="doublefacedcard" id="singlecard">
                     <img class="overlayfrontFace" src=${cardData.card_faces[0].image_uris.normal}>
                     <img class="overlaybackSide" src=${cardData.card_faces[1].image_uris.normal}>
                 </div>
                 <button class="flipbtn">flip</button>
+            `}
             </section>
             <section id="textbox">
                 <div id="frontFaceText">
@@ -114,7 +118,9 @@ async function CreateInfoPage(cardData){
                         <p id="flavortext">${cardData.card_faces[0].flavor_text}</p>
                     `:``}
                     </div>
+                    ${'power' in cardData ?`
                     <p>${cardData.card_faces[0].power}/${cardData.card_faces[0].toughness}</p>
+                    `:``}
                 </div>
                 <div id="backSideText">
                     <h1>${cardData.card_faces[1].name}</h1>
@@ -127,7 +133,9 @@ async function CreateInfoPage(cardData){
                         <p id="flavortext">${cardData.card_faces[1].flavor_text}</p>
                     `:``}
                     </div>
+                    ${'power' in cardData ?`
                     <p>${cardData.card_faces[1].power}/${cardData.card_faces[1].toughness}</p>
+                    `:``}
                 </div>
                 <p id="artist">Illustrated by ${cardData.artist}</p>
             </section>
