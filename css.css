@@ -38,6 +38,7 @@ body{
 .overlaybackSide{
     transform: rotateY(180deg);
 }
+
 .frontFace, .backSide{
     grid-area: 1/1;
     position: absolute;
@@ -48,7 +49,6 @@ body{
 }
 
 .flipbtn{
-    position: absolute;
     opacity: 0.80;
     background: white;
     -webkit-border-radius: 100%;
@@ -60,6 +60,7 @@ body{
     padding: 7px;
     cursor: pointer;
 }
+
 img{
     width: 100%;
 }

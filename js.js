@@ -97,14 +97,12 @@ async function CreateInfoPage(cardData){
     console.log(cardData.layout)
         Info.innerHTML=`
             ${'card_faces' in cardData ? `
-            <section id="cardbox">${'split' == cardData.layout ? `
-            <img id="singlecard" src=${cardData.image_uris.normal}>
-        `:`<div class="doublefacedcard" id="singlecard">
+            <section id="cardbox"><div class="doublefacedcard" id="singlecard">
                     <img class="overlayfrontFace" src=${cardData.card_faces[0].image_uris.normal}>
                     <img class="overlaybackSide" src=${cardData.card_faces[1].image_uris.normal}>
                 </div>
                 <button class="flipbtn">flip</button>
-            `}
+
             </section>
             <section id="textbox">
                 <div id="frontFaceText">
