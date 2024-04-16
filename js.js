@@ -197,14 +197,16 @@ async function CreateInfoPage(cardData){
                     if (!obj.card_faces[box.id].flavor_text) {
                         if(flavorText){
                             flavorText.innerHTML = ''; // Clear flavor text if it doesn't exist
-                        }else{
-                            add_flavor_text__to_doublefacedcard(box, obj)
                         }
                     }else{
                         if(flavorText){
                             flavorText.innerHTML = `${obj.card_faces[box.id].flavor_text}`;
                         }else{
-                            add_flavor_text__to_doublefacedcard(box, obj)
+                            flavorText = document.createElement('p');
+                            flavorText.classList.add('flavortext');
+                            flavorText.setAttribute('id', `${box.id}`)
+                            flavorText.innerHTML=`${obj.card_faces[box.id].flavor_text}`
+                            box.appendChild(flavorText);
                         }
                     }
                 })
@@ -214,32 +216,18 @@ async function CreateInfoPage(cardData){
                     if (!obj.flavor_text) {
                         if(flavorText){
                             flavorText.innerHTML = ''; // Clear flavor text if it doesn't exist
-                        }else{
-                            add_flavor_text__to_singlefacedcard(box, obj)
                         }
                     }else {
                         if(flavorText){
                             flavorText.innerHTML = `${obj.flavor_text}`;
                         }else{
-                            add_flavor_text__to_singlefacedcard(box, obj)
+                            flavorText = document.createElement('p');
+                            flavorText.classList.add('flavortext');
+                            flavorText.innerHTML=`${obj.flavor_text}`
+                            box.appendChild(flavorText);
                         }
                     }
                 });
             }
     }
-}
-
-function add_flavor_text__to_doublefacedcard(box, obj){
-    flavorText = document.createElement('p');
-    flavorText.classList.add('flavortext');
-    flavorText.setAttribute('id', `${box.id}`)
-    flavorText.innerHTML=`${obj.card_faces[box.id].flavor_text}`
-    box.appendChild(flavorText);
-}
-
-function add_flavor_text__to_singlefacedcard(box, obj){
-    flavorText = document.createElement('p');
-    flavorText.classList.add('flavortext');
-    flavorText.innerHTML=`${obj.flavor_text}`
-    box.appendChild(flavorText);
 }
