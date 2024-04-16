@@ -93,16 +93,16 @@ async function CreateInfoPage(cardData){
 
     var Info = document.createElement('section')
     Info.id = "cardInfo"
-    console.log(cardData)
-    console.log(cardData.layout)
         Info.innerHTML=`
             ${'card_faces' in cardData ? `
-            <section id="cardbox"><div class="doublefacedcard" id="singlecard">
+            <section id="cardbox">${'split' == cardData.layout ? `
+            <img id="singlecard" src=${cardData.image_uris.normal}>
+        `:`<div class="doublefacedcard" id="singlecard">
                     <img class="overlayfrontFace" src=${cardData.card_faces[0].image_uris.normal}>
                     <img class="overlaybackSide" src=${cardData.card_faces[1].image_uris.normal}>
                 </div>
                 <button class="flipbtn">flip</button>
-
+            `}
             </section>
             <section id="textbox">
                 <div id="frontFaceText">
@@ -111,9 +111,9 @@ async function CreateInfoPage(cardData){
                     <div>
                         <p>${cardData.card_faces[0].oracle_text}</p>
                     </div>
-                    <div id="flavorBox">
+                    <div class="flavorBox" id="0">
                     ${'flavor_text' in cardData.card_faces[0] ?`
-                        <p id="flavortext">${cardData.card_faces[0].flavor_text}</p>
+                        <p class="flavortext">${cardData.card_faces[0].flavor_text}</p>
                     `:``}
                     </div>
                     ${'power' in cardData ?`
@@ -126,9 +126,9 @@ async function CreateInfoPage(cardData){
                     <div>
                         <p>${cardData.card_faces[1].oracle_text}</p>
                     </div>
-                    <div id="flavorBox">
+                    <div class="flavorBox" id="1">
                     ${'flavor_text' in cardData.card_faces[1] ?`
-                        <p id="flavortext">${cardData.card_faces[1].flavor_text}</p>
+                        <p class="flavortext">${cardData.card_faces[1].flavor_text}</p>
                     `:``}
                     </div>
                     ${'power' in cardData ?`
@@ -147,9 +147,9 @@ async function CreateInfoPage(cardData){
                 <div>
                     <p>${cardData.oracle_text}</p>
                 </div>
-                <div id="flavorBox">
+                <div class="flavorBox">
                 ${'flavor_text' in cardData ?`
-                    <p id="flavortext">${cardData.flavor_text}</p>
+                    <p class="flavortext">${cardData.flavor_text}</p>
                 `:``}
                 </div>
                 ${'power' in cardData ?`
@@ -176,14 +176,14 @@ async function CreateInfoPage(cardData){
         }
         function changeinfo(obj){
             var cardart = document.getElementById('singlecard')
-            var flavorText = document.getElementById('flavortext')
             var artistName = document.getElementById('artist')
-            var flavorBox = document.getElementById('flavorBox')
+            var flavorBox = document.querySelectorAll('.flavorBox')
+
 
             if(cardart.hasChildNodes()){
                 cardart.innerHTML = `
-                <img class="frontFace" src=${obj.card_faces[0].image_uris.normal}>
-                <img class="backSide" src=${obj.card_faces[1].image_uris.normal}>
+                <img class="overlayfrontFace" src=${obj.card_faces[0].image_uris.normal}>
+                <img class="overlaybackSide" src=${obj.card_faces[1].image_uris.normal}>
                 `
             }else{
                 cardart.setAttribute('src', obj.image_uris.normal,)
@@ -191,13 +191,55 @@ async function CreateInfoPage(cardData){
             
             artistName.innerText=`Illustrated by ${obj.artist}`
 
-            if(!obj.flavor_text){
-                flavorBox.innerHTML=``
-            }else if(flavorBox.hasChildNodes()){
-                console.log(flavorBox.children)
-                flavorText.innerText=`${obj.flavor_text}`
-            }else{
-                flavorBox.innerHTML=`<p id="flavortext">${obj.flavor_text}</p>`
+            if(flavorBox.length > 1){
+                flavorBox.forEach(box => {
+                    var flavorText = box.querySelector('.flavortext');
+                    if (!obj.card_faces[box.id].flavor_text) {
+                        if(flavorText){
+                            flavorText.innerHTML = ''; // Clear flavor text if it doesn't exist
+                        }else{
+                            add_flavor_text__to_doublefacedcard(box, obj)
+                        }
+                    }else{
+                        if(flavorText){
+                            flavorText.innerHTML = `${obj.card_faces[box.id].flavor_text}`;
+                        }else{
+                            add_flavor_text__to_doublefacedcard(box, obj)
+                        }
+                    }
+                })
+            } else {
+                flavorBox.forEach(box => {
+                    var flavorText = box.querySelector('.flavortext');
+                    if (!obj.flavor_text) {
+                        if(flavorText){
+                            flavorText.innerHTML = ''; // Clear flavor text if it doesn't exist
+                        }else{
+                            add_flavor_text__to_singlefacedcard(box, obj)
+                        }
+                    }else {
+                        if(flavorText){
+                            flavorText.innerHTML = `${obj.flavor_text}`;
+                        }else{
+                            add_flavor_text__to_singlefacedcard(box, obj)
+                        }
+                    }
+                });
             }
     }
+}
+
+function add_flavor_text__to_doublefacedcard(box, obj){
+    flavorText = document.createElement('p');
+    flavorText.classList.add('flavortext');
+    flavorText.setAttribute('id', `${box.id}`)
+    flavorText.innerHTML=`${obj.card_faces[box.id].flavor_text}`
+    box.appendChild(flavorText);
+}
+
+function add_flavor_text__to_singlefacedcard(box, obj){
+    flavorText = document.createElement('p');
+    flavorText.classList.add('flavortext');
+    flavorText.innerHTML=`${obj.flavor_text}`
+    box.appendChild(flavorText);
 }
