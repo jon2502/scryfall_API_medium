@@ -90,7 +90,21 @@ async function CreateInfoPage(cardData){
     closeBtn.addEventListener('click', (e) => {
         e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode);
     })
-
+    const generateTextBoxHTML = (i) => {
+        return`<h1>${cardData.card_faces[i].name}</h1>
+        <p>${cardData.card_faces[i].type_line}</p>
+        <div>
+            <p>${cardData.card_faces[i].oracle_text}</p>
+        </div>
+        <div class="flavorBox" id="${i}">
+        ${'flavor_text' in cardData.card_faces[i] ?`
+            <p class="flavortext">${cardData.card_faces[i].flavor_text}</p>
+        `:``}
+        </div>
+        ${'power' in cardData ?`
+        <p>${cardData.card_faces[i].power}/${cardData.card_faces[i].toughness}</p>
+        `:``}`
+    }
     var Info = document.createElement('section')
     Info.id = "cardInfo"
         Info.innerHTML=`
@@ -106,34 +120,10 @@ async function CreateInfoPage(cardData){
             </section>
             <section id="textbox">
                 <div id="frontFaceText">
-                    <h1>${cardData.card_faces[0].name}</h1>
-                    <p>${cardData.card_faces[0].type_line}</p>
-                    <div>
-                        <p>${cardData.card_faces[0].oracle_text}</p>
-                    </div>
-                    <div class="flavorBox" id="0">
-                    ${'flavor_text' in cardData.card_faces[0] ?`
-                        <p class="flavortext">${cardData.card_faces[0].flavor_text}</p>
-                    `:``}
-                    </div>
-                    ${'power' in cardData ?`
-                    <p>${cardData.card_faces[0].power}/${cardData.card_faces[0].toughness}</p>
-                    `:``}
+                    ${generateTextBoxHTML(0)}
                 </div>
                 <div id="backSideText">
-                    <h1>${cardData.card_faces[1].name}</h1>
-                    <p>${cardData.card_faces[1].type_line}</p>
-                    <div>
-                        <p>${cardData.card_faces[1].oracle_text}</p>
-                    </div>
-                    <div class="flavorBox" id="1">
-                    ${'flavor_text' in cardData.card_faces[1] ?`
-                        <p class="flavortext">${cardData.card_faces[1].flavor_text}</p>
-                    `:``}
-                    </div>
-                    ${'power' in cardData ?`
-                    <p>${cardData.card_faces[1].power}/${cardData.card_faces[1].toughness}</p>
-                    `:``}
+                    ${generateTextBoxHTML(1)}
                 </div>
                 <p id="artist">Illustrated by ${cardData.artist}</p>
             </section>
