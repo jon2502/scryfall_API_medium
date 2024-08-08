@@ -59,12 +59,13 @@ async function generateimg(Data){
     }
 }
 
+// set a funcion that adds a class to the element on click 
+//which cahnges the styling of the card resulting in it showing the element beneth it
 function setflip(){
     var flipButtons = document.querySelectorAll('.flipbtn')
     flipButtons.forEach(btn=>{
         btn.addEventListener('click',function(){
             card = btn.parentElement.childNodes[0]
-            console.log(card)
             if(card.classList.contains('flip')){
                 card.classList.remove('flip')
             }else{
@@ -76,6 +77,7 @@ function setflip(){
 }
 
 async function CreateInfoPage(cardData){
+    // get data for each prinitng of a card
     const response = await fetch(`${URL3_1}${cardData.name}${URL3_2}`);
     const jsonData = await response.json();
 
@@ -114,7 +116,7 @@ async function CreateInfoPage(cardData){
     Info.id = "cardInfo"
         Info.innerHTML=`
             `
-            // check if the data for thee cards contains card faces to check if its either a doublefaced card or a split card.
+            // check if the data for the cards contains card faces to check if its either a doublefaced card or a split card.
             `
             ${'card_faces' in cardData ? `
             <section id="cardbox">${'split' == cardData.layout ? `
@@ -128,6 +130,7 @@ async function CreateInfoPage(cardData){
             </section>
             <section id="textbox">
                 <div id="frontFaceText">
+                    `/* generate info for each of the cardfaces of a doublefaced card*/`
                     ${generateTextBoxHTML(0)}
                 </div>
                 <div id="backSideText">
@@ -168,10 +171,12 @@ async function CreateInfoPage(cardData){
             switchinfo.addEventListener('mouseover', function(){
 
             })
+             
             switchinfo.addEventListener('click', function(){
                 changeinfo(object)
             })
         }
+        // change content shown based on a data for spesifick printing of a card
         function changeinfo(obj){
             var cardart = document.getElementById('singlecard')
             var artistName = document.getElementById('artist')
@@ -179,6 +184,7 @@ async function CreateInfoPage(cardData){
 
 
             if(cardart.hasChildNodes()){
+                //check if singlecard has childelement to check if the card is doublefaced
                 cardart.innerHTML = `
                 <img class="overlayfrontFace" src=${obj.card_faces[0].image_uris.normal}>
                 <img class="overlaybackSide" src=${obj.card_faces[1].image_uris.normal}>
@@ -189,6 +195,8 @@ async function CreateInfoPage(cardData){
             
             artistName.innerText=`Illustrated by ${obj.artist}`
 
+            //check if card is doublefaced and has two flavorboxes for doublefaced cards
+            //added to make sure everything is done correctly and the change of data doesent destroy the defult UI for the data
             if(flavorBox.length > 1){
                 flavorBox.forEach(box => {
                     var flavorText = box.querySelector('.flavortext');
@@ -211,14 +219,17 @@ async function CreateInfoPage(cardData){
             } else {
                 flavorBox.forEach(box => {
                     var flavorText = box.querySelector('.flavortext');
+                    // Clear flavor text if it doesn't exist in the new data
                     if (!obj.flavor_text) {
                         if(flavorText){
-                            flavorText.innerHTML = ''; // Clear flavor text if it doesn't exist
+                            flavorText.innerHTML = ''; 
                         }
                     }else {
                         if(flavorText){
+                            //set flavortext to new value
                             flavorText.innerHTML = `${obj.flavor_text}`;
                         }else{
+                            // if flavor text dosent exist create it again
                             flavorText = document.createElement('p');
                             flavorText.classList.add('flavortext');
                             flavorText.innerHTML=`${obj.flavor_text}`
