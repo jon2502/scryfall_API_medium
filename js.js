@@ -1,17 +1,21 @@
 var send = document.getElementById('send')
 var print = document.getElementById('print')
 var cardsprint = document.getElementById('cardsprint')
+// required API URL's
 const URL1 = 'https://api.scryfall.com/cards/autocomplete?q='
 const URL2 = 'https://api.scryfall.com/cards/named?exact='
 const URL3_1 = 'https://api.scryfall.com/cards/search?q="'
 const URL3_2 = '"+unique%3Aprints&unique=cards'
 
-
+//set eventlistner for textbox button
 print.addEventListener("click", loadDoc);
 
+//fetch the up to 20 card names based on the content of the send value
+//value is recived as an array
 async function loadDoc() {
     const response = await fetch(`${URL1}${send.value}`);
     const jsonData = await response.json();
+    // run next funcion with the JSON data as a parameter
     generateimg(jsonData)
 }
 async function generateimg(Data){
@@ -21,6 +25,7 @@ async function generateimg(Data){
         const cardData = await response.json();
         CreateInfoPage(cardData)
     }else{
+        // if there is more then one string in the array run the funcion for each of those strings
         for ( objects of Data.data) {
             const response = await fetch(`${URL2}${objects}`);
             const cardData = await response.json();
@@ -108,6 +113,9 @@ async function CreateInfoPage(cardData){
     var Info = document.createElement('section')
     Info.id = "cardInfo"
         Info.innerHTML=`
+            `
+            // check if the data for thee cards contains card faces to check if its either a doublefaced card or a split card.
+            `
             ${'card_faces' in cardData ? `
             <section id="cardbox">${'split' == cardData.layout ? `
             <img id="singlecard" src=${cardData.image_uris.normal}>
