@@ -114,10 +114,8 @@ async function CreateInfoPage(cardData){
     }
     var Info = document.createElement('section')
     Info.id = "cardInfo"
+        /*check if the data for the cards contains card faces to check if its either a doublefaced card or a split card.*/
         Info.innerHTML=`
-            `
-            // check if the data for the cards contains card faces to check if its either a doublefaced card or a split card.
-            `
             ${'card_faces' in cardData ? `
             <section id="cardbox">${'split' == cardData.layout ? `
             <img id="singlecard" src=${cardData.image_uris.normal}>
@@ -130,8 +128,7 @@ async function CreateInfoPage(cardData){
             </section>
             <section id="textbox">
                 <div id="frontFaceText">
-                    `/* generate info for each of the cardfaces of a doublefaced card*/`
-                    ${generateTextBoxHTML(0)}
+                    ${/* generate info for each of the cardfaces of a doublefaced card*/ generateTextBoxHTML(0)}
                 </div>
                 <div id="backSideText">
                     ${generateTextBoxHTML(1)}
@@ -153,7 +150,7 @@ async function CreateInfoPage(cardData){
                     <p class="flavortext">${cardData.flavor_text}</p>
                 `:``}
                 </div>
-                ${'power' in cardData ?`
+                ${'power' in cardData ? /* check if the card has a power value this is beacus only creatur cards has a power toughness value */`
                     <p>${cardData.power}/${cardData.toughness}</p>
                 `:``}
             <p id="artist">Illustrated by ${cardData.artist}</p>
