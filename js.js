@@ -25,6 +25,7 @@ async function fetchSymbols() {
     const jsonData = await response.json();
     SymbolMap = {}
     jsonData.data.forEach(Symbol =>{
+        //for each symbol we add the symbol as the key and the svg link as the value
         SymbolMap[Symbol.symbol] = Symbol.svg_uri;
     })
     return SymbolMap;
@@ -128,10 +129,12 @@ async function CreateInfoPage(cardData){
     
     function replaceSymbolsWithSVGs(text, symbolMap){
         console.log(text)
+        //set up regex to remove text to be replaced
         const regex = /\{([A-Za-z0-9\+\-\/]+)\}/g;
         return text.replace(regex, (match, symbol) => {
             NewSymbol = `{${symbol}}`
             if (symbolMap[NewSymbol]) {
+                //return an img with the svg link
                 return `<img src="${symbolMap[NewSymbol]}" alt="${NewSymbol}" class="symbol-icon">`;
             }
             // If no SVG is found, return the symbol as is
@@ -171,17 +174,21 @@ async function CreateInfoPage(cardData){
             </section>
             <section id="textbox">
                 <h1>${cardData.name} ${replaceSymbolsWithSVGs(cardData.mana_cost, symbolMap)}</h1>
+                <hr>
                 <p>${cardData.type_line}</p>
+                <hr>
                 <div>
                     <p>${replaceSymbolsWithSVGs(cardData.oracle_text, symbolMap)}</p>
                 </div>
                 <div class="flavorBox">
                 ${'flavor_text' in cardData ?`
-                    <p class="flavortext">${cardData.flavor_text}</p>
+                    <p class="flavortext"><i>${cardData.flavor_text}<i></p>
+                    <hr>
                 `:``}
                 </div>
                 ${'power' in cardData ? /* check if the card has a power value this is beacus only creatur cards has a power toughness value */`
                     <p>${cardData.power}/${cardData.toughness}</p>
+                    <hr>
                 `:``}
             <p id="artist">Illustrated by ${cardData.artist}</p>
             </section>
