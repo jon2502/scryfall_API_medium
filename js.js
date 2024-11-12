@@ -6,6 +6,7 @@ const URL1 = 'https://api.scryfall.com/cards/autocomplete?q='
 const URL2 = 'https://api.scryfall.com/cards/named?exact='
 const URL3_1 = 'https://api.scryfall.com/cards/search?q="'
 const URL3_2 = '"+unique%3Aprints&unique=cards'
+const URL4 = 'https://api.scryfall.com/symbology'
 
 //set eventlistner for textbox button
 print.addEventListener("click", loadDoc);
@@ -18,6 +19,17 @@ async function loadDoc() {
     // run next funcion with the JSON data as a parameter
     generateimg(jsonData)
 }
+
+async function fetchSymbols() {
+    const response = await fetch(`${URL4}`)
+    const jsonData = await response.json();
+    SymbolMap = {}
+    jsonData.data.forEach(Symbol =>{
+        SymbolMap[Symbol.symbol] = Symbol.svg_uri;
+    })
+    return SymbolMap;
+}
+
 async function generateimg(Data){
     cardsprint.innerHTML=``
     if(Data.data.length == 1){
@@ -77,6 +89,7 @@ function setflip(){
 }
 
 async function CreateInfoPage(cardData){
+    const symbolMap = await fetchSymbols();
     // get data for each prinitng of a card
     const response = await fetch(`${URL3_1}${cardData.name}${URL3_2}`);
     const jsonData = await response.json();
@@ -98,10 +111,10 @@ async function CreateInfoPage(cardData){
         e.target.parentNode.parentNode.parentNode.removeChild(e.target.parentNode.parentNode);
     })
     const generateTextBoxHTML = (i) => {
-        return`<h1>${cardData.card_faces[i].name}</h1>
+        return`<h1>${cardData.card_faces[i].name} ${replaceSymbolsWithSVGs(cardData.card_faces[i].mana_cost, symbolMap)}</h1>
         <p>${cardData.card_faces[i].type_line}</p>
         <div>
-            <p>${cardData.card_faces[i].oracle_text}</p>
+            <p>${replaceSymbolsWithSVGs(cardData.card_faces[i].oracle_text,symbolMap)}</p>
         </div>
         <div class="flavorBox" id="${i}">
         ${'flavor_text' in cardData.card_faces[i] ?`
@@ -112,6 +125,23 @@ async function CreateInfoPage(cardData){
         <p>${cardData.card_faces[i].power}/${cardData.card_faces[i].toughness}</p>
         `:``}`
     }
+    
+    function replaceSymbolsWithSVGs(text, symbolMap){
+        console.log(text)
+        const regex = /\{([A-Za-z0-9\+\-\/]+)\}/g;
+        return text.replace(regex, (match, symbol) => {
+            NewSymbol = `{${symbol}}`
+            if (symbolMap[NewSymbol]) {
+                return `<img src="${symbolMap[NewSymbol]}" alt="${NewSymbol}" class="symbol-icon">`;
+            }
+            // If no SVG is found, return the symbol as is
+            return match;
+        });
+    }
+
+  
+
+    console.log(cardData)
     var Info = document.createElement('section')
     Info.id = "cardInfo"
         /*check if the data for the cards contains card faces to check if its either a doublefaced card or a split card.*/
@@ -140,10 +170,10 @@ async function CreateInfoPage(cardData){
             <img id="singlecard" src=${cardData.image_uris.normal}>
             </section>
             <section id="textbox">
-                <h1>${cardData.name}</h1>
+                <h1>${cardData.name} ${replaceSymbolsWithSVGs(cardData.mana_cost, symbolMap)}</h1>
                 <p>${cardData.type_line}</p>
                 <div>
-                    <p>${cardData.oracle_text}</p>
+                    <p>${replaceSymbolsWithSVGs(cardData.oracle_text, symbolMap)}</p>
                 </div>
                 <div class="flavorBox">
                 ${'flavor_text' in cardData ?`
@@ -235,5 +265,5 @@ async function CreateInfoPage(cardData){
                     }
                 });
             }
-    }
+}
 }

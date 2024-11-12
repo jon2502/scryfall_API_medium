@@ -111,3 +111,9 @@ img{
 #singlecard{
     display: grid;
 }
+
+.symbol-icon{
+    width: 5%;
+    height: 5%;
+    vertical-align: middle;
+}
