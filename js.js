@@ -142,8 +142,6 @@ async function CreateInfoPage(cardData){
         });
     }
 
-  
-
     console.log(cardData)
     var Info = document.createElement('section')
     Info.id = "cardInfo"
@@ -182,7 +180,7 @@ async function CreateInfoPage(cardData){
                 </div>
                 <div class="flavorBox">
                 ${'flavor_text' in cardData ?`
-                    <p class="flavortext"><i>${cardData.flavor_text}<i></p>
+                    <p class="flavortext"><i>${cardData.flavor_text}</i></p>
                     <hr>
                 `:``}
                 </div>
